@@ -1,0 +1,73 @@
+[gd_scene load_steps=10 format=3 uid="uid://bkoqr0vqle10q"]
+
+[ext_resource type="PackedScene" uid="uid://cmfeyqux51cev" path="res://Scenes/Components/GameplayUI.tscn" id="1_a1bny"]
+[ext_resource type="Script" path="res://Scenes/GameplayBattle.cs" id="1_gevlg"]
+[ext_resource type="PackedScene" uid="uid://d1wmd3667wucc" path="res://Assets/3d/PlayingTable.gltf" id="2_0maxb"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_71776"]
+
+[sub_resource type="Sky" id="Sky_qu1y3"]
+sky_material = SubResource("ProceduralSkyMaterial_71776")
+
+[sub_resource type="Environment" id="Environment_3uqkh"]
+background_mode = 2
+background_color = Color(0, 0.427451, 0.952941, 1)
+sky = SubResource("Sky_qu1y3")
+ambient_light_source = 3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjcn1"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_o7q7l"]
+material = SubResource("StandardMaterial3D_jjcn1")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gfswb"]
+albedo_color = Color(0.905882, 0.560784, 0.505882, 1)
+
+[node name="GameplayBattle" type="CanvasLayer"]
+
+[node name="Node3D" type="Node3D" parent="."]
+script = ExtResource("1_gevlg")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Node3D"]
+environment = SubResource("Environment_3uqkh")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Node3D"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SubViewport" type="SubViewport" parent="Node3D/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera" type="Camera3D" parent="Node3D/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.950662, 0.310228, 0, -0.310228, 0.950662, 0, 5.21168, -2.89208)
+
+[node name="Node3D" type="Node3D" parent="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -15.7429)
+mesh = SubResource("CapsuleMesh_o7q7l")
+surface_material_override/0 = SubResource("StandardMaterial3D_gfswb")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 0.94897, 0.315367, 0, -0.315367, 0.94897, 0, 3.31624, -4.68725)
+light_color = Color(0.972549, 0.694118, 0.843137, 1)
+light_energy = 9.432
+light_indirect_energy = 5.757
+light_size = 0.331
+light_bake_mode = 1
+shadow_enabled = true
+spot_range = 11.537
+spot_angle = 27.1366
+
+[node name="Node3D2" type="Node3D" parent="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/Node3D2"]
+
+[node name="PlayingTable" parent="Node3D" instance=ExtResource("2_0maxb")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, -2.6654, -13)
+
+[node name="UserInterface" parent="." instance=ExtResource("1_a1bny")]
+offset_right = -1.0
+offset_bottom = -1.0

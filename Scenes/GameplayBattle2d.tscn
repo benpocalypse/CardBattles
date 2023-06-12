@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1c00rdj4jacm"]
+
+[ext_resource type="PackedScene" uid="uid://cmfeyqux51cev" path="res://Scenes/Components/GameplayUI.tscn" id="1_f3gem"]
+
+[node name="GameplayBattle2d" type="Node2D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UserInterface" parent="CanvasLayer" instance=ExtResource("1_f3gem")]
+
+[node name="Node3D" type="Node3D" parent="."]
