@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://bkoqr0vqle10q"]
+[gd_scene load_steps=13 format=3 uid="uid://bkoqr0vqle10q"]
 
 [ext_resource type="PackedScene" uid="uid://cmfeyqux51cev" path="res://Scenes/Components/GameplayUI.tscn" id="1_a1bny"]
 [ext_resource type="Script" path="res://Scenes/GameplayBattle.cs" id="1_gevlg"]
 [ext_resource type="PackedScene" uid="uid://d1wmd3667wucc" path="res://Assets/3d/PlayingTable.gltf" id="2_0maxb"]
+[ext_resource type="PackedScene" uid="uid://brdmoxwjhf1pk" path="res://Assets/3d/Card.gltf" id="3_8i7xi"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_71776"]
 
@@ -15,6 +16,8 @@ background_color = Color(0, 0.427451, 0.952941, 1)
 sky = SubResource("Sky_qu1y3")
 ambient_light_source = 3
 
+[sub_resource type="BoxMesh" id="BoxMesh_yax6g"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjcn1"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_o7q7l"]
@@ -22,6 +25,13 @@ material = SubResource("StandardMaterial3D_jjcn1")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gfswb"]
 albedo_color = Color(0.905882, 0.560784, 0.505882, 1)
+
+[sub_resource type="Curve3D" id="Curve3D_7nuqw"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 1.5, 0, 1.5, -1.5, 0, -1.5, -5.65802, 0, -3.51338, 0, 0, 2.1, 0, 0, -2.1, -7.60156, 0, -8.24549, -1, 0, 1.3, 1, 0, -1.3, -6.24953, 0, -12.0058, 0, 0, 0, 0, 0, 0, -1.93185, -0.517638, -14),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
 
 [node name="GameplayBattle" type="CanvasLayer"]
 
@@ -31,22 +41,18 @@ script = ExtResource("1_gevlg")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Node3D"]
 environment = SubResource("Environment_3uqkh")
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Node3D"]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="Land1Node3d" type="Node3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.43709, 2.81064, -9.89394)
 
-[node name="SubViewport" type="SubViewport" parent="Node3D/SubViewportContainer"]
-handle_input_locally = false
-size = Vector2i(1920, 1080)
-render_target_update_mode = 4
+[node name="Node3d" type="MeshInstance3D" parent="Node3D/Land1Node3d"]
+transform = Transform3D(1, 0, 0, 0, 0.206138, 0, 0, 0, 1.56778, 0, 0, 0)
+transparency = 0.69
+mesh = SubResource("BoxMesh_yax6g")
 
-[node name="Camera" type="Camera3D" parent="Node3D/SubViewportContainer/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 0.950662, 0.310228, 0, -0.310228, 0.950662, 0, 5.21168, -2.89208)
+[node name="Opponent" type="Node3D" parent="Node3D"]
 
-[node name="Node3D" type="Node3D" parent="Node3D"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -15.7429)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/Opponent"]
+transform = Transform3D(1.6, 0, 0, 0, 2.47, 0, 0, 0, 1.82, 1, 3, -15.7429)
 mesh = SubResource("CapsuleMesh_o7q7l")
 surface_material_override/0 = SubResource("StandardMaterial3D_gfswb")
 
@@ -61,13 +67,48 @@ shadow_enabled = true
 spot_range = 11.537
 spot_angle = 27.1366
 
-[node name="Node3D2" type="Node3D" parent="Node3D"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/Node3D2"]
-
 [node name="PlayingTable" parent="Node3D" instance=ExtResource("2_0maxb")]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, -2.6654, -13)
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0.0346, -11.0135)
+
+[node name="Card" parent="Node3D" instance=ExtResource("3_8i7xi")]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, -0.477769, 3.27351, -0.648474)
+visible = false
+
+[node name="GameplayViewportContainer" type="SubViewportContainer" parent="Node3D"]
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="SubViewport" type="SubViewport" parent="Node3D/GameplayViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera" type="Camera3D" parent="Node3D/GameplayViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.668184, 0.743996, 0, -0.743996, 0.668184, 0, 8.21168, -5.89208)
+current = true
+
+[node name="ActionViewportContainer" type="SubViewportContainer" parent="Node3D"]
+visible = false
+offset_right = 1919.0
+offset_bottom = 1082.0
+
+[node name="SubViewport" type="SubViewport" parent="Node3D/ActionViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 0
+
+[node name="Path3D" type="Path3D" parent="Node3D/ActionViewportContainer/SubViewport"]
+transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, 0, 4, 0)
+curve = SubResource("Curve3D_7nuqw")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Node3D/ActionViewportContainer/SubViewport/Path3D"]
+transform = Transform3D(-0.527521, 0, -0.849526, 0, 0.999996, 0, 0.849529, 0, -0.527519, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Node3D/ActionViewportContainer/SubViewport/Path3D/PathFollow3D"]
+transform = Transform3D(-0.428307, 0.136537, 0.893271, 0.2577, 0.965929, -0.0240805, -0.866124, 0.219882, -0.448899, 1.60685, 1.93186, -0.388462)
 
 [node name="UserInterface" parent="." instance=ExtResource("1_a1bny")]
 offset_right = -1.0
 offset_bottom = -1.0
+
+[connection signal="CardClicked" from="UserInterface" to="Node3D" method="CardClicked"]

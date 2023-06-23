@@ -6,6 +6,9 @@ public partial class GameplayUI : Control
 	[Export]
 	private int TestExport = 3;
 
+	[Signal]
+	public delegate void CardClickedEventHandler(int cardNumber);
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -17,28 +20,24 @@ public partial class GameplayUI : Control
 	{
 	}
 
-	public void Card1_on_area_2d_input_event(Viewport viewport, InputEvent _event, int shape_idx)
+	public void Card1_button_pressed()
 	{
-		GD.Print("Clicked!");
-	}
-
-	public void _on_area_2d_mouse_entered()
-	{
-		GD.Print("Mouse entered1!");
-	}
-
-	public void _on_texture_rect_gui_input()
-	{
-		GD.Print("Mouse entered2!");
-	}
-
-	public void Area2d_on_area_2d_area_entered()
-	{
-		GD.Print("Mouse entered3!");
+		GD.Print("Card 1 pressed!");
+		GetNode<TextureButton>("Card1").Visible = false;
+		EmitSignal(SignalName.CardClicked, 1);
 	}
 
 	public void Card2_button_pressed()
 	{
 		GD.Print("Card 2 pressed!");
+		GetNode<TextureButton>("Card2").Visible = false;
+		EmitSignal(SignalName.CardClicked, 2);
+	}
+
+	public void Card3_button_pressed()
+	{
+		GD.Print("Card 3 pressed!");
+		GetNode<TextureButton>("Card3").Visible = false;
+		EmitSignal(SignalName.CardClicked, 3);
 	}
 }
