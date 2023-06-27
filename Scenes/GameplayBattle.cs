@@ -1,30 +1,31 @@
 using Godot;
 using System;
 
-public static class NumericExtensions
-{
-    public static float ToRadians(this float val)
-    {
-        return ((float)(Math.PI / 180) * val);
-    }
-}
+namespace CardBattles;
 
 public partial class GameplayBattle : Node3D
 {
 	private bool _mouseClicked = false;
+	private bool _rightButtonClicked = false;
 	private Node3D _card;
 	private Node3D _land1;
 	private Camera3D _gameplayCamera;
+	private SubViewportContainer _gameplayViewport;
 	private Camera3D _actionCamera;
+	private SubViewportContainer _actionViewport;
 	private PathFollow3D _path;
+	private GameplayUI _gameplayUi;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		_path = GetNode<SubViewportContainer>("ActionViewportContainer").GetChild<SubViewport>(0).GetChild<Path3D>(0).GetChild<PathFollow3D>(0);
 		_actionCamera = GetNode<SubViewportContainer>("ActionViewportContainer").GetChild<SubViewport>(0).GetChild<Path3D>(0).GetChild<PathFollow3D>(0).GetChild<Camera3D>(0);
+		_actionViewport = GetNode<SubViewportContainer>("ActionViewportContainer");
 		_gameplayCamera = GetNode<SubViewportContainer>("GameplayViewportContainer").GetChild(0).GetChild<Camera3D>(0);
+		_gameplayViewport = GetNode<SubViewportContainer>("GameplayViewportContainer");
 		_land1 = GetNode<Node3D>("Land1Node3d");
+		_gameplayUi = this.GetParent().GetNode<GameplayUI>("UserInterface");
 	}
 
     private void CardClicked(int cardNumber)
@@ -34,16 +35,20 @@ public partial class GameplayBattle : Node3D
 		_card = GetNode<Node3D>("Card");
 		_card.Visible = true;
 		_mouseClicked = true;
-		/*
-		_gameplayCamera.Current = false;
-		GetViewport().GetCamera3D().Current = false;
-		_actionCamera.Current = true;
-		*/
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
 	{
+		if (_rightButtonClicked)
+		{
+			_gameplayCamera.Current = false;
+			_gameplayViewport.Visible = false;
+			_actionViewport.Visible = true;
+			_actionCamera.Current = true;
+            _gameplayUi.Visible = false;
+		}
+
 		if (Input.IsActionPressed("ui_right"))
 		{
 			//var cam = GetNodeOrNull<Camera3D>("Camera");
@@ -68,20 +73,17 @@ public partial class GameplayBattle : Node3D
 			TranslateObjectLocal(-Transform.Basis.Z);
 		}
 
-		if (_mouseClicked)
+		if (_rightButtonClicked)
 		{
 			if (_path.ProgressRatio < 0.95f)
 			{
-				//_path.ProgressRatio += 0.01f;
+				_path.ProgressRatio += 0.01f;
 			}
-			//GD.Print($"Camera position = {_gameplayCamera.Position.X}, {_gameplayCamera.Position.Y}, {_gameplayCamera.Position.Z}");
 		}
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		
-		
 		//GD.Print($"Card position = {_card.Position.X}, {_card.Position.Y}, {_card.Position.Z}");
 	}
 
@@ -122,21 +124,27 @@ public partial class GameplayBattle : Node3D
 
 			//GD.Print($"mousePosition.X = {mouseMotion.Position.X}, mousePosition.Y = {mouseMotion.Position.Y}");
 		}
-		/*
-		if (@event is InputEventMouseMotion mouseMotion)
+
+		if(@event is InputEventMouseButton mouseButton && mouseButton.Pressed)
 		{
-			// modify accumulated mouse rotation
-			_rotationX += mouseMotion.Relative.X * LookAroundSpeed;
-			_rotationY += mouseMotion.Relative.Y * LookAroundSpeed;
+			_rightButtonClicked = mouseButton.ButtonIndex switch
+			{
+				MouseButton.Right => true,
+				_ => false
+			};
 
-			// reset rotation
-			Transform3D transform = Transform;
-			transform.Basis = Basis.Identity;
-			Transform = transform;
+		}
+	}
 
-			RotateObjectLocal(Vector3.Up, _rotationX); // first rotate about Y
-			RotateObjectLocal(Vector3.Right, _rotationY); // then rotate about X
-		} 
-		*/
+	public void Land1AreaEntered(Area3D area)
+	{
+		GD.Print("Area entered!");
+
+		Vector3 rotationDegrees = _card.RotationDegrees;
+		rotationDegrees.Z = _land1.Rotation.Z;
+
+		_card.RotationDegrees = rotationDegrees;
+		_card.Position = _land1.Position;
+		_mouseClicked = false;
 	}
 }

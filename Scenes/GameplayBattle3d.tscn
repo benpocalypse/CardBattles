@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bkoqr0vqle10q"]
+[gd_scene load_steps=15 format=3 uid="uid://bkoqr0vqle10q"]
 
 [ext_resource type="PackedScene" uid="uid://cmfeyqux51cev" path="res://Scenes/Components/GameplayUI.tscn" id="1_a1bny"]
 [ext_resource type="Script" path="res://Scenes/GameplayBattle.cs" id="1_gevlg"]
@@ -17,6 +17,10 @@ sky = SubResource("Sky_qu1y3")
 ambient_light_source = 3
 
 [sub_resource type="BoxMesh" id="BoxMesh_yax6g"]
+size = Vector3(1, 0.2, 1.2)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qbcwb"]
+radius = 0.4
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjcn1"]
 
@@ -25,6 +29,9 @@ material = SubResource("StandardMaterial3D_jjcn1")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gfswb"]
 albedo_color = Color(0.905882, 0.560784, 0.505882, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8sbiq"]
+size = Vector3(1, 0.2, 0.8)
 
 [sub_resource type="Curve3D" id="Curve3D_7nuqw"]
 _data = {
@@ -45,9 +52,16 @@ environment = SubResource("Environment_3uqkh")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.43709, 2.81064, -9.89394)
 
 [node name="Node3d" type="MeshInstance3D" parent="Node3D/Land1Node3d"]
-transform = Transform3D(1, 0, 0, 0, 0.206138, 0, 0, 0, 1.56778, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0866146, 0.234154)
 transparency = 0.69
 mesh = SubResource("BoxMesh_yax6g")
+
+[node name="Area3D" type="Area3D" parent="Node3D/Land1Node3d/Node3d"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/Land1Node3d/Node3d/Area3D"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+shape = SubResource("SphereShape3D_qbcwb")
 
 [node name="Opponent" type="Node3D" parent="Node3D"]
 
@@ -73,6 +87,11 @@ transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0.0346, -11.0135)
 [node name="Card" parent="Node3D" instance=ExtResource("3_8i7xi")]
 transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, -0.477769, 3.27351, -0.648474)
 visible = false
+
+[node name="Area3D" type="Area3D" parent="Node3D/Card"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/Card/Area3D"]
+shape = SubResource("BoxShape3D_8sbiq")
 
 [node name="GameplayViewportContainer" type="SubViewportContainer" parent="Node3D"]
 offset_right = 1920.0
@@ -102,7 +121,7 @@ transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, 
 curve = SubResource("Curve3D_7nuqw")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Node3D/ActionViewportContainer/SubViewport/Path3D"]
-transform = Transform3D(-0.527521, 0, -0.849526, 0, 0.999996, 0, 0.849529, 0, -0.527519, 0, 0, 0)
+transform = Transform3D(-0.52752, 0, -0.849526, 0, 0.999996, 0, 0.84953, 0, -0.527518, 0, 0, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Node3D/ActionViewportContainer/SubViewport/Path3D/PathFollow3D"]
 transform = Transform3D(-0.428307, 0.136537, 0.893271, 0.2577, 0.965929, -0.0240805, -0.866124, 0.219882, -0.448899, 1.60685, 1.93186, -0.388462)
@@ -111,4 +130,5 @@ transform = Transform3D(-0.428307, 0.136537, 0.893271, 0.2577, 0.965929, -0.0240
 offset_right = -1.0
 offset_bottom = -1.0
 
+[connection signal="area_entered" from="Node3D/Land1Node3d/Node3d/Area3D" to="Node3D" method="Land1AreaEntered"]
 [connection signal="CardClicked" from="UserInterface" to="Node3D" method="CardClicked"]

@@ -1,6 +1,8 @@
 using Godot;
 using System;
 
+namespace CardBattles;
+
 public partial class GameplayUI : Control
 {
 	[Export]

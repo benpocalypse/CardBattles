@@ -51,6 +51,7 @@ action_mode = 0
 texture_normal = ExtResource("2_1nwgw")
 
 [node name="Card2" type="TextureButton" parent="."]
+layout_mode = 0
 offset_left = 773.0
 offset_top = 790.0
 offset_right = 923.0
@@ -59,6 +60,7 @@ action_mode = 0
 texture_normal = ExtResource("2_1nwgw")
 
 [node name="Card3" type="TextureButton" parent="."]
+layout_mode = 0
 offset_left = 980.0
 offset_top = 790.0
 offset_right = 1130.0
