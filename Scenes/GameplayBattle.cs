@@ -28,15 +28,6 @@ public partial class GameplayBattle : Node3D
 		_gameplayUi = this.GetParent().GetNode<GameplayUI>("UserInterface");
 	}
 
-    private void CardClicked(int cardNumber)
-    {
-        GD.Print($"Main scene, card {cardNumber} clicked!");
-
-		_card = GetNode<Node3D>("Card");
-		_card.Visible = true;
-		_mouseClicked = true;
-    }
-
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
 	{
@@ -104,7 +95,7 @@ public partial class GameplayBattle : Node3D
 			Vector3 rotationDegrees = _card.RotationDegrees;
 			rotationDegrees.Z = currentRotationDegrees;
 
-			GD.Print($"_card.RotationDegrees.Z = {_card.RotationDegrees.Z}, _land1.Position.Z = {_land1.Position.Z}. _card.Position.Z = {_card.Position.Z}, currentRotationDegrees = {currentRotationDegrees}");
+			//GD.Print($"_card.RotationDegrees.Z = {_card.RotationDegrees.Z}, _land1.Position.Z = {_land1.Position.Z}. _card.Position.Z = {_card.Position.Z}, currentRotationDegrees = {currentRotationDegrees}");
 			if (_card.RotationDegrees.X < currentRotationDegrees)
 			{
 				_card.RotationDegrees = rotationDegrees;
@@ -136,15 +127,31 @@ public partial class GameplayBattle : Node3D
 		}
 	}
 
-	public void Land1AreaEntered(Area3D area)
+	private void CardClicked(int cardNumber)
+    {
+        GD.Print($"Main scene, card {cardNumber} clicked!");
+
+		_card = GetNode<Node3D>("Card");
+		_card.Visible = true;
+		_mouseClicked = true;
+    }
+
+	private void Land1AreaEntered(Area3D area)
 	{
 		GD.Print("Area entered!");
 
+		/*
 		Vector3 rotationDegrees = _card.RotationDegrees;
 		rotationDegrees.Z = _land1.Rotation.Z;
 
 		_card.RotationDegrees = rotationDegrees;
 		_card.Position = _land1.Position;
 		_mouseClicked = false;
+		*/
+	}
+
+	private void OnLandSpaceEntered(int landNumber)
+	{
+		GD.Print($"New Land Space {landNumber} Entered!");
 	}
 }

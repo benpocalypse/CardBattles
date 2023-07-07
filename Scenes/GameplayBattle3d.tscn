@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://bkoqr0vqle10q"]
+[gd_scene load_steps=16 format=3 uid="uid://bkoqr0vqle10q"]
 
 [ext_resource type="PackedScene" uid="uid://cmfeyqux51cev" path="res://Scenes/Components/GameplayUI.tscn" id="1_a1bny"]
 [ext_resource type="Script" path="res://Scenes/GameplayBattle.cs" id="1_gevlg"]
 [ext_resource type="PackedScene" uid="uid://d1wmd3667wucc" path="res://Assets/3d/PlayingTable.gltf" id="2_0maxb"]
 [ext_resource type="PackedScene" uid="uid://brdmoxwjhf1pk" path="res://Assets/3d/Card.gltf" id="3_8i7xi"]
+[ext_resource type="PackedScene" uid="uid://88xoit2biswt" path="res://Scenes/Components/LandSpace.tscn" id="4_ban63"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_71776"]
 
@@ -49,7 +50,7 @@ script = ExtResource("1_gevlg")
 environment = SubResource("Environment_3uqkh")
 
 [node name="Land1Node3d" type="Node3D" parent="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.43709, 2.81064, -9.89394)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.118792, 2.81064, -9.89394)
 
 [node name="Node3d" type="MeshInstance3D" parent="Node3D/Land1Node3d"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0866146, 0.234154)
@@ -57,7 +58,6 @@ transparency = 0.69
 mesh = SubResource("BoxMesh_yax6g")
 
 [node name="Area3D" type="Area3D" parent="Node3D/Land1Node3d/Node3d"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/Land1Node3d/Node3d/Area3D"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
@@ -126,9 +126,14 @@ transform = Transform3D(-0.52752, 0, -0.849526, 0, 0.999996, 0, 0.84953, 0, -0.5
 [node name="Camera3D" type="Camera3D" parent="Node3D/ActionViewportContainer/SubViewport/Path3D/PathFollow3D"]
 transform = Transform3D(-0.428307, 0.136537, 0.893271, 0.2577, 0.965929, -0.0240805, -0.866124, 0.219882, -0.448899, 1.60685, 1.93186, -0.388462)
 
+[node name="LandSpace1" parent="Node3D" instance=ExtResource("4_ban63")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.40869, 2.8, -9.91943)
+LandNumber = 1
+
 [node name="UserInterface" parent="." instance=ExtResource("1_a1bny")]
 offset_right = -1.0
 offset_bottom = -1.0
 
 [connection signal="area_entered" from="Node3D/Land1Node3d/Node3d/Area3D" to="Node3D" method="Land1AreaEntered"]
+[connection signal="LandSpaceEntered" from="Node3D/LandSpace1" to="Node3D" method="OnLandSpaceEntered"]
 [connection signal="CardClicked" from="UserInterface" to="Node3D" method="CardClicked"]
