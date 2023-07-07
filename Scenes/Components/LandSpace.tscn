@@ -22,4 +22,4 @@ mesh = SubResource("BoxMesh_tig8s")
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 shape = SubResource("SphereShape3D_fpjmo")
 
-[connection signal="area_entered" from="Node3d/Area3D" to="." method="LandSpaceEnteredEvent"]
+[connection signal="area_entered" from="Node3d/Area3D" to="." method="LandSpace_entered_event"]

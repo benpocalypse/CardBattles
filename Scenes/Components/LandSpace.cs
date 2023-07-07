@@ -21,7 +21,7 @@ public partial class LandSpace : Node3D
 	{
 	}
 
-	public void LandSpaceEnteredEvent()
+	public void LandSpace_entered_event(Area3D area)
 	{
 		GD.Print($"LandSpace: {LandNumber} entered!");
 		EmitSignal(SignalName.LandSpaceEntered, LandNumber);
