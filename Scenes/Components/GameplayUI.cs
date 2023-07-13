@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-namespace CardBattles;
+namespace ng.bengineeri.CardBattles;
 
 public partial class GameplayUI : Control
 {

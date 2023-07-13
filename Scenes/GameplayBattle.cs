@@ -1,7 +1,8 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
-namespace CardBattles;
+namespace ng.bengineeri.CardBattles;
 
 public partial class GameplayBattle : Node3D
 {
@@ -16,6 +17,8 @@ public partial class GameplayBattle : Node3D
 	private PathFollow3D _path;
 	private Vector3 _toPosition;
 	private GameplayUI _gameplayUi;
+
+	private List<MeshInstance3D> _lines = new();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -65,6 +68,16 @@ public partial class GameplayBattle : Node3D
 		{
 			TranslateObjectLocal(-Transform.Basis.Z);
 		}
+
+		if (Input.IsActionPressed("go_up"))
+		{
+			TranslateObjectLocal(-Transform.Basis.Y);
+		}
+
+		if (Input.IsActionPressed("go_down"))
+		{
+			TranslateObjectLocal(Transform.Basis.Y);
+		}
 	}
 
 
@@ -90,6 +103,11 @@ public partial class GameplayBattle : Node3D
 
 			var newPosition = new Vector3(_toPosition.X, _card.Position.Y, _toPosition.Z);
 			_card.Position = newPosition;
+
+			_lines.ForEach(line => line.QueueFree());
+			_lines.Clear();
+
+			_lines.Add(DrawLine(fromPosition, _toPosition, _whiteColor));
 		}
 
 		if(@event is InputEventMouseButton mouseButton && mouseButton.Pressed)
@@ -102,6 +120,7 @@ public partial class GameplayBattle : Node3D
 
 		}
 	}
+	
 
 	private void CardClicked(int cardNumber)
     {
@@ -136,5 +155,33 @@ public partial class GameplayBattle : Node3D
 		_card.RotationDegrees = rotationDegrees;
 		_card.Position = landNode.Position;
 		_mouseClicked = false;
+	}
+
+	private readonly Color _whiteColor = Color.Color8(255,255,255,255);
+	private MeshInstance3D DrawLine(Vector3 pos1, Vector3 pos2, Color color)
+	{
+		var mesh_instance = new MeshInstance3D();
+		var immediate_mesh = new ImmediateMesh();
+		var material = new OrmMaterial3D();
+		
+		mesh_instance.Mesh = immediate_mesh;
+		mesh_instance.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
+
+		immediate_mesh.SurfaceBegin(Mesh.PrimitiveType.Lines, material);
+		immediate_mesh.SurfaceAddVertex(pos1);
+		immediate_mesh.SurfaceAddVertex(pos2);
+		immediate_mesh.SurfaceEnd();
+		
+		material.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
+		material.AlbedoColor = color;
+		
+		//GetTree().Root.AddChild(mesh_instance);
+
+		//GetParent().GetChild(0).AddChild(mesh_instance);
+
+		var test = GetNode<Node3D>("Test");
+		test.AddChild(mesh_instance);
+		
+		return mesh_instance;
 	}
 }

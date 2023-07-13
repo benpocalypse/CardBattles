@@ -23,7 +23,6 @@ ambient_light_source = 3
 material = SubResource("StandardMaterial3D_jjcn1")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gfswb"]
-albedo_color = Color(0.905882, 0.560784, 0.505882, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8sbiq"]
 size = Vector3(1, 0.2, 0.8)
@@ -112,6 +111,8 @@ LandNumber = 1
 
 [node name="CardPivotPoint" type="Node3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.77449, 1, -10.9933)
+
+[node name="Test" type="Node3D" parent="Node3D"]
 
 [node name="UserInterface" parent="." instance=ExtResource("1_a1bny")]
 offset_right = -1.0
