@@ -122,6 +122,10 @@ public partial class GameplayBattle : Node3D
 	}
 	
 
+	// TODO - Have this instantiate the correct card based on which one was clicked.
+	//		  This will require N card models for N different types of cards :/
+	//		  It seems you can't simply swap out the texture when using GLTF models.
+	//		  In addtion to pointing at a png file, the image data is encoded in the file.
 	private void CardClicked(int cardNumber)
     {
         GD.Print($"Main scene, card {cardNumber} clicked!");
